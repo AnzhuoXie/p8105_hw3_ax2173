@@ -12,6 +12,18 @@ library(tidyverse)
 
 ## Problem 2
 
+```{r}
+acc_df = 
+  read_csv("./Data/accel_data.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(weekday_or_weekend = ifelse((day == 'Saturday' | day == "Sunday"), 'Weekend', 'Weekday')) %>% 
+  select(week, day_id, day, weekday_or_weekend, everything())
+```
+
+* There are some descriptions:
+  * This dataset contains these variables: `r colnames(acc_df)`
+  * There are totally `r nrow(acc_df)` observations
+  * There are totally `r ncol(acc_df)` variables
 
 ## Problem 3
 
