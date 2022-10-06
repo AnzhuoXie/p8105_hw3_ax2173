@@ -1,0 +1,17 @@
+---
+title: "p8015_hw3_ax2173"
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+```
+
+## Problem 1
+
+
+## Problem 2
+
+
+## Problem 3
+
