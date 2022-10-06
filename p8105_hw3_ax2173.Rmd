@@ -12,11 +12,20 @@ library(tidyverse)
 
 ## Problem 2
 
+Import, clean and manipulate data.
+
 ```{r}
 acc_df = 
   read_csv("./Data/accel_data.csv") %>% 
   janitor::clean_names() %>% 
-  mutate(weekday_or_weekend = ifelse((day == 'Saturday' | day == "Sunday"), 'Weekend', 'Weekday')) %>% 
+  mutate(
+    weekday_or_weekend = ifelse((day == 'Saturday' | day == "Sunday"), 'Weekend', 'Weekday')
+    ) %>% 
+  pivot_longer(
+    activity_1 : activity_1440,
+    names_to = 'activity_num',
+    values_to = 'activity_counts'
+  ) %>% 
   select(week, day_id, day, weekday_or_weekend, everything())
 ```
 
@@ -24,6 +33,16 @@ acc_df =
   * This dataset contains these variables: `r colnames(acc_df)`
   * There are totally `r nrow(acc_df)` observations
   * There are totally `r ncol(acc_df)` variables
+
+Aggregate across minutes to create a total activity variable for each day.
+
+```{r}
+
+```
+
+
+
+
 
 ## Problem 3
 
