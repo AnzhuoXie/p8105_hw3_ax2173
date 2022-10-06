@@ -92,3 +92,36 @@ library(p8105.datasets)
 data("ny_noaa")
 ```
 
+* There are some descriptions about the data:
+  * The size of this dataset is `r nrow(ny_noaa)` x `r ncol(ny_noaa)`
+  * This dataset had these variables: `r colnames(ny_noaa)`
+  * Almost all the data in this dataset are missing, in other words, the extend of missing value is huge.
+  
+Next, do the data cleaning and create separate variables for year, month and day.
+  
+```{r}
+ny_nozz = 
+  ny_noaa %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c('year', 'month',  'day'), sep = '-')
+```
+
+Calculate the most commonly observed values about snowfall. 
+  * From the density plot, we can know that the most commonly observed values about snowfall is 0.
+
+```{r fig.width=12, fig.height=9}
+ny_noaa %>% 
+  group_by(snow) %>% 
+    summarize(snowfall_count = n()) %>% 
+  ggplot(aes(x = snow)) +
+  geom_density() +
+    labs(
+    title = 'The scatter plot of snowfall data',
+    x = 'snowfall',
+    y = 'snowfall_count',
+    caption = 'Data from noaa package'
+  )
+```
+
+
+  
