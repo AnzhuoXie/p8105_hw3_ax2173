@@ -50,7 +50,9 @@ acc_df =
   * There are totally `r nrow(acc_df)` observations
   * There are totally `r ncol(acc_df)` variables
 
-Aggregate across minutes to create a total activity variable for each day, and create a table to show these totals.
+Aggregate across minutes to create a total activity variable for each day, and create a table to show these totals. 
+
+* As for any trends apparent, I am not sure, but I guess the day activity is relatively lower in weekends than in weekdays.
 
 ```{r}
 acc_df %>% 
@@ -59,15 +61,14 @@ acc_df %>%
   knitr::kable(digits = 2)
 ```
 
-Let's make a point plot to see whether there are any trends apparent. 
-
-* I am not sure, but I guess the day activity is relatively lower in weekends than in weekdays.
+Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week.
 
 ```{r fig.width=6, fig.height=3}
 acc_df %>% 
   group_by(week, day_id, day) %>% 
   summarize(day_activity = sum(activity_counts)) %>% 
-  ggplot(aes(x = day_id, y = day_activity)) +
+  ggplot(aes(x = day_id, y = day_activity, color = week)) +
+  geom_point() +
   geom_line() +
   labs(
     title = 'The daily activity of this 63-year-old man',
@@ -77,6 +78,10 @@ acc_df %>%
   )
 ```
 
+* About some patterns or conclusions I can make based on this graph.
+  * A huge fluctuation can be found during the whole process
+  * The highest data was in the Monday of week 3, reaching 685920.00
+  * The lowest data appeared both in Saturday in week 4 and Saturday in week 5, with daily activity data of just 1440.00
 
 ## Problem 3
 
