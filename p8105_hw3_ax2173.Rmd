@@ -32,6 +32,53 @@ library(p8105.datasets)
 data("instacart")
 ```
 
+* There are some descriptions about the data:
+  * The size of this dataset is `r nrow(instacart)` x `r ncol(instacart)`
+  * This dataset had these variables: `r colnames(instacart)`
+
+How many aisles are there, and which aisles are the most items ordered from?
+
+```{r}
+instacart %>% 
+  summarize(aisle_count = n_distinct(aisle_id))
+```
+
+```{r}
+instacart %>% 
+  group_by(aisle) %>% 
+  summarize(aisle_cal = n()) %>% 
+  mutate(aisle_rank = min_rank(desc(aisle_cal))) %>% 
+  arrange(desc(aisle_cal))
+```
+
+The most items ordered from is fresh vegetables.
+
+Then, show the three most popular items in aisles.
+
+```{r}
+instacart %>% 
+  filter(aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>%
+  group_by(aisle) %>% 
+  count(product_name) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+  filter(rank < 4) %>% 
+  arrange(desc(n)) %>%
+  knitr::kable()
+```
+
+Showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week. 
+This table has been formatted in an untidy manner for human readers. 
+Pink Lady Apples are generally purchased slightly earlier in the day than Coffee Ice Cream, with the exception of day 5.
+
+```{r}
+instacart %>%
+  filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>%
+  group_by(product_name, order_dow) %>%
+  summarize(mean_hour = mean(order_hour_of_day)) %>%
+  spread(key = order_dow, value = mean_hour) %>%
+  knitr::kable(digits = 2)
+```
+
 
 ## Problem 2
 
