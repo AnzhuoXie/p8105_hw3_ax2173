@@ -195,10 +195,10 @@ ny_noaa %>%
   filter(month == '01' | month == '07')  %>% 
   group_by(id, month) %>% 
     summarize(average_tmax = mean(tmax, na.rm = TRUE)) %>% 
-  ggplot(aes(x = month, y = average_tmax)) +
+  ggplot(aes(x = month, y = average_tmax, fill = month)) +
   geom_boxplot() +
   labs(
-    title = 'The Plot of Average Max Temperature in January and February',
+    title = 'The Plot of Average Max Temperature in January and July',
     x = 'Month',
     y = 'Average Max Temperature(C)',
     caption = 'Data is from noaa package')
@@ -216,7 +216,7 @@ ny_noaa %>%
     names_to = 'temperature_category',
     values_to = 'temperature'
   ) %>% 
-  ggplot(aes(x = temperature_category, y = temperature)) +
+  ggplot(aes(x = temperature_category, y = temperature, fill = temperature_category)) +
   geom_boxplot()  +
   labs(
     title = 'The Plot of Tmax vs Tmin for the Full Dataset',
