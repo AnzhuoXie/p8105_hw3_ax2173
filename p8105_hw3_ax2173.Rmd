@@ -117,19 +117,25 @@ acc_df %>%
 
 Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week.
 
-```{r fig.width=6, fig.height=3}
+```{r}
 acc_df %>% 
-  group_by(week, day_id, day) %>% 
+  separate(activity_num, into = c('activity','second'), sep = "_") %>% 
+  mutate(second = as.numeric(second),
+    time = round(second/60,2)) %>% 
+  select(-activity, -second) %>% 
+  group_by(time, day) %>% 
   summarize(day_activity = sum(activity_counts)) %>% 
-  ggplot(aes(x = day_id, y = day_activity, color = week)) +
-  geom_point() +
-  geom_line() +
+  ggplot(aes(x = time, y = day_activity, color = day)) +
+  geom_point(alpha = 0.1, size = 0.5) +
   labs(
     title = 'The Daily Activity of This 63-year-old Man',
-    x = 'the Day ID',
+    x = 'Time',
     y = 'the Day Activity',
-    caption = 'the day activity is aggregated across minutes'
-  )
+    caption = 'the day activity is aggregated across day'
+  ) +
+  scale_x_continuous(
+    breaks = c(0, 3, 6, 9, 12, 15, 18, 21, 24)
+  ) 
 ```
 
 * About some patterns or conclusions I can make based on this graph.
