@@ -5,6 +5,7 @@ output: github_document
 
 ```{r}  
 library(tidyverse)
+library(patchwork)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -202,7 +203,6 @@ ny_noaa %>%
     summarize(average_tmax = mean(tmax, na.rm = TRUE)) %>% 
   ggplot(aes(x = year, y = average_tmax, color = id)) +
   geom_point(size = 0.2, alpha = 0.7) +
- # geom_path(alpha = 0.5) +
   facet_grid(. ~ month) +
   labs(
     title = 'The Plot of Average Max Temperature in January and July',
@@ -216,13 +216,13 @@ ny_noaa %>%
   theme(legend.position = "none")
 ```
 
-Make a two-panel plot showing tmax vs tmin for the full dataset
+Make a two-panel plot showing tmax vs tmin for the full dataset, and make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
   * The median of max temperature is around 15 C, and the median of min temperature is around 3 C.
   * The data in tmin is spread more wider than that of tmax.
-  * Both of these data many have outliers.
 
 ```{r fig.width=7, fig.height=5}
-ny_noaa %>% 
+tmax_vs_tmin = 
+  ny_noaa %>% 
   pivot_longer(
     tmax : tmin,
     names_to = 'temperature_category',
@@ -232,15 +232,12 @@ ny_noaa %>%
   geom_boxplot()  +
   labs(
     title = 'The Plot of Tmax vs Tmin for the Full Dataset',
-    x = 'Temperature Category',
+    x = 'Temperature_category',
     y = 'Temperature(C)',
     caption = 'Data is from noaa package')
-```
 
-Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
-
-```{r fig.width=9, fig.height=6}
-ny_noaa %>% 
+snowfall_plot =
+  ny_noaa %>% 
   filter(snow > 0 & snow <100) %>% 
   group_by(year) %>% 
     summarize(snowfall = sum(snow, na.rm = TRUE)) %>% 
@@ -251,5 +248,8 @@ ny_noaa %>%
     x = 'Year',
     y = 'Snowfall(mm)',
     caption = 'Data is from noaa package'
-  )
+  ) +
+  theme(axis.text.x = element_text(angle = 90))
+
+tmax_vs_tmin / snowfall_plot
 ```
